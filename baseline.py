@@ -564,38 +564,8 @@ void main()
 """
 
 
-def lookat(M, camera, look):
-    """Computes matrix to put camera looking at look point."""
-    c = np.asarray(camera).astype(float)
 
-    # u, v, w are the new axis directions. Since OpenGL has the camera view in
-    # the negative z direction, w is the vector from the lookat point to the
-    # camera position.
-    w = c - np.asarray(look).astype(float)
-
-    # To get u, we just cross the "up" direction (same as old up direction)
-    # with our new w.
-    u = np.cross([0, 1, 0], w)
-
-    # Finally, we can recover our new, orthogonal up direction by crossing w
-    # and u.
-    v = np.cross(w, u)
-
-    # Take the norm of each vector.
-    u /= np.linalg.norm(u)
-    v /= np.linalg.norm(v)
-    w /= np.linalg.norm(w)
-
-    # This vector is a translation followed by a rotation. A vector is
-    # translated by negative c, which means that vector is moved to its camera
-    # position. Then, the rotation from the new coordinates is applied.
-    T = np.r_[u, u.dot(-c),
-              v, v.dot(-c),
-              w, w.dot(-c),
-              0, 0, 0, 1].reshape(4, 4)
-    M[...] = T.dot(M)
-    return M
-
+#Inspiration cam from here: https://github.com/vispy/vispy/blob/master/examples/demo/gloo/terrain.py
 class Canvas(app.Canvas):
 
     def __init__(self):
